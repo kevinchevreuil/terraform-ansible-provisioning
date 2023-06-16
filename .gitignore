@@ -1,0 +1,6 @@
+terraform.tfstate
+terraform.tfstate.backup
+linux-key-pair.pem
+..gitignore.swp
+.terraform
+.terraform.lock.hcl
