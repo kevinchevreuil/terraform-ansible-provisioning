@@ -1,11 +1,11 @@
 resource "local_file" "ansible-inventory" {
   content = templatefile(
-    "${path.module}/ansible-inventory.tftpl",
+    "${path.module}/ansible/ansible-inventory.tftpl",
     {
       ec2-public-ip = aws_instance.kaisen[0].public_ip,
     }
   )
-  filename = "${path.module}/hosts"
+  filename = "${path.module}/ansible/hosts"
   file_permission = "0644"
 
   connection {
@@ -22,6 +22,6 @@ resource "local_file" "ansible-inventory" {
   }
 
   provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook --private-key ${var.private_key_path} -u admin -i hosts nginx.yml"
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook --become --become-user root --become-method sudo --private-key ${var.private_key_path} -u admin -i ansible/hosts ansible/apache.yml"
   }
 }

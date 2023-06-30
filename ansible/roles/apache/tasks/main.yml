@@ -1,0 +1,31 @@
+---
+- name: Installation of apache2
+  ansible.builtin.apt:
+    name: apache2
+    update_cache: yes
+
+- name: Create the new Apache user
+  ansible.builtin.user:
+    name: "{{ apache_user }}"
+    comment: "Service account for apache2"
+    shell: /usr/sbin/nologin
+    uid: 99999
+    home: /tmp
+    create_home: false
+
+- name: Copy envvars
+  ansible.builtin.template:
+    src: envvars.j2
+    dest: /etc/apache2/envvars
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart apache2
+
+- name: Installation of the configuration
+  ansible.builtin.copy:
+    src: index.html
+    dest: /var/www/html
+    owner: "{{ apache_user }}"
+    group: "{{ apache_user }}"
+    mode: '0755'

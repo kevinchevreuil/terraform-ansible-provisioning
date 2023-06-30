@@ -1,6 +1,7 @@
-resource "aws_security_group" "kaisen_sg" {
-  name        = "kaisen_sg"
-  description = "Security group for web-server with HTTP, HTTPS and SSH open ports"
+resource "aws_security_group" "kaisen" {
+  name        = "kaisen"
+  description = "Security group for web-server with HTTP ports open within VPC"
+  vpc_id      = aws_vpc.kaisen.id
   egress {
     from_port   = 0
     to_port     = 0
